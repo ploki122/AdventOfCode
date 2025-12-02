@@ -4,6 +4,10 @@
 )
 AS
 BEGIN
+	
+	---------------------
+	--  Data handling  --
+	---------------------
 	DROP TABLE IF EXISTS #splits;
 	DROP TABLE IF EXISTS #numSplits;
 
@@ -27,7 +31,10 @@ BEGIN
 	SELECT value, CAST(REPLACE(REPLACE(value, 'R', ''), 'L', '-') AS SMALLINT) as iValue, ordinal
 	INTO #numSplits
 	FROM #splits;
-
+	
+	---------------------
+	-- Phase 1 solving --
+	---------------------
 	WITH Phase1Data AS 
 	(
 		SELECT value
@@ -43,6 +50,9 @@ BEGIN
 		, SUM(CASE WHEN runningSum%100 = 0 THEN 1 END) OVER(ORDER BY ordinal) AS NbZero
 	FROM Phase1Data;
 	
+	---------------------
+	-- Phase 2 solving --
+	---------------------
 	WITH Phase2Data AS
 	(
 		SELECT value
