@@ -25,28 +25,26 @@ BEGIN
 	CROSS APPLY STRING_SPLIT(split.value, '-', 1) as secondSplit
 	WHERE split.value <> ''
 	GROUP BY split.value;
-
+	
 	---------------------
 	-- Phase 1 solving --
 	---------------------
+	WITH ValidResults AS(
+		SELECT REPLICATE(racine.value, 2) AS value
+		FROM GENERATE_SERIES(1, 99999, 1) AS racine
+	)
+	SELECT SUM(CAST(value AS NUMERIC(20,0))) 
+	FROM #splits splits INNER JOIN ValidResults ON ValidResults.value BETWEEN CAST(splits.RangeStart AS NUMERIC(10,0)) AND CAST(splits.RangeEnd AS NUMERIC(10,0));
 
-	SELECT SUM(value)
-	FROM #splits
-	CROSS APPLY GENERATE_SERIES(CAST(RangeStart AS NUMERIC(10,0)), CAST(RangeEnd AS NUMERIC(10,0)), CAST(1 AS NUMERIC(10,0))) as series
-	WHERE LEN(value)%2 = 0
-		AND LEFT(value, LEN(value)/2) = RIGHT(value, LEN(value)/2);
-	
 	---------------------
 	-- Phase 2 solving --
 	---------------------
-	DECLARE @RowNumber INT = 99999999;
 	WITH ValidResults AS(
-		SELECT DISTINCT TOP (@RowNumber) REPLICATE(racine.value, mult.value) AS value
+		SELECT DISTINCT REPLICATE(racine.value, mult.value) AS value
 		FROM GENERATE_SERIES(1, 99999, 1) AS racine
 			, GENERATE_SERIES(2, 10) AS mult
 		WHERE LEN(racine.value) * mult.value <= 10
 	)
 	SELECT SUM(CAST(value AS NUMERIC(20,0))) 
-	FROM #splits splits INNER JOIN ValidResults ON ValidResults.value BETWEEN CAST(splits.RangeStart AS NUMERIC(10,0)) AND CAST(splits.RangeEnd AS NUMERIC(10,0))
-	OPTION(OPTIMIZE FOR(@RowNumber = 100000));
+	FROM #splits splits INNER JOIN ValidResults ON ValidResults.value BETWEEN CAST(splits.RangeStart AS NUMERIC(10,0)) AND CAST(splits.RangeEnd AS NUMERIC(10,0));
 END
