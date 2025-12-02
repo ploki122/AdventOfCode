@@ -1,5 +1,6 @@
 ﻿
-CREATE   PROCEDURE usp_RetrieveData
+
+CREATE   PROCEDURE [dbo].[usp_RetrieveData]
 	@Year SMALLINT = NULL,
 	@Day TINYINT = NULL,
 	@Type NVARCHAR(10) = 'Real',
@@ -14,7 +15,7 @@ BEGIN
 	IF(@ForceCacheRefresh = 1)
 		DELETE CachedData WHERE Year = @Year AND Day = @Day AND Type = @Type;
 
-	IF NOT EXISTS(SELECT Data FROM CachedData WHERE Year = @Year AND Day = @Day AND Type = @Type AND @Type = 'Real')
+	IF @Type = 'Real' AND NOT EXISTS(SELECT Data FROM CachedData WHERE Year = @Year AND Day = @Day AND Type = @Type)
 	BEGIN
 		-- Declare the variable where the response will be saved
 		DECLARE @responseTable TABLE (Result NVARCHAR(MAX));
@@ -51,6 +52,7 @@ BEGIN
 		-- Set Request Headers
 		EXEC @ret = sp_OAMethod @token, 'setRequestHeader' , NULL, 'Content-type', @contentType;
 		EXEC @ret = sp_OAMethod @token, 'setRequestHeader' , NULL, 'Cookie', @OAuthToken;
+		EXEC @ret = sp_OAMethod @token, 'setRequestHeader' , NULL, 'User-Agent', 'github.com/ploki122/AdventOfCode v1.0';
 
 		-- Send request to API
 		EXEC @ret = sp_OAMethod @token, 'send' , NULL, @Body;
