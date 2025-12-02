@@ -64,6 +64,7 @@
     <Build Include="dbo\Tables\SecretKeys.sql" />
     <Build Include="dbo\Tables\CachedData.sql" />
     <Build Include="dbo\Stored Procedures\usp_RetrieveData.sql" />
-    <Build Include="dbo\Stored Procedures\AOC2025_Day1_Part1.sql" />
+    <Build Include="dbo\Stored Procedures\AOC2025_Day2.sql" />
+    <Build Include="dbo\Stored Procedures\AOC2025_Day1.sql" />
   </ItemGroup>
 </Project>

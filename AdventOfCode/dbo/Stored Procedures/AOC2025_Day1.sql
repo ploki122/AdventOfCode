@@ -1,13 +1,12 @@
-﻿CREATE   PROCEDURE dbo.AOC2025_Day1_Part1
+﻿CREATE   PROCEDURE dbo.[AOC2025_Day1]
 (
 	@Type varchar(10) = 'Real'
 )
 AS
 BEGIN
-	
-	---------------------
-	--  Data handling  --
-	---------------------
+	-------------------
+	-- Data handling --
+	-------------------
 	DROP TABLE IF EXISTS #splits;
 	DROP TABLE IF EXISTS #numSplits;
 
@@ -31,7 +30,7 @@ BEGIN
 	SELECT value, CAST(REPLACE(REPLACE(value, 'R', ''), 'L', '-') AS SMALLINT) as iValue, ordinal
 	INTO #numSplits
 	FROM #splits;
-	
+
 	---------------------
 	-- Phase 1 solving --
 	---------------------
