@@ -66,5 +66,6 @@
     <Build Include="dbo\Stored Procedures\usp_RetrieveData.sql" />
     <Build Include="dbo\Stored Procedures\AOC2025_Day2.sql" />
     <Build Include="dbo\Stored Procedures\AOC2025_Day1.sql" />
+    <Build Include="dbo\Stored Procedures\AOC2025_Day3.sql" />
   </ItemGroup>
 </Project>
