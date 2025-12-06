@@ -68,5 +68,9 @@
     <Build Include="dbo\Stored Procedures\AOC2025_Day1.sql" />
     <Build Include="dbo\Stored Procedures\AOC2025_Day3.sql" />
     <Build Include="dbo\Stored Procedures\AOC2025_Day4.sql" />
+    <Build Include="dbo\Stored Procedures\AOC2025_Day5.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SqlSchemaCompare2.scmp" />
   </ItemGroup>
 </Project>
